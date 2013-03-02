@@ -274,7 +274,6 @@ var Tuner, frequencies, root,
               freq = interp * (sampleRate / fftSize);
               _ref5 = getPitch(freq), note = _ref5[0], diff = _ref5[1];
               callback(freq, note, diff);
-              record(freq, note, diff);
             }
           } else {
             maxPeaks = 0;
