@@ -179,17 +179,17 @@ var Tuner, frequencies, root,
             upsampled.push(0);
           }
           fft.forward(upsampled);
-          if (noiseCount < 10) {
-            noiseThreshold = _.reduce(fft.spectrum, (function(max, next) {
-              if (next > max) {
-                return next;
-              } else {
-                return max;
-              }
-            }), noiseThreshold);
-            noiseThrehold = noiseThreshold > 0.001 ? 0.001 : noiseThreshold;
-            noiseCount++;
-          }
+//          if (noiseCount < 10) {
+//            noiseThreshold = _.reduce(fft.spectrum, (function(max, next) {
+//              if (next > max) {
+//                return next;
+//              } else {
+//                return max;
+//              }
+//            }), noiseThreshold);
+//            noiseThrehold = noiseThreshold > 0.001 ? 0.001 : noiseThreshold;
+//            noiseCount++;
+//          }
           spectrumPoints = (function() {
             var _k, _ref1, _results;
             _results = [];
