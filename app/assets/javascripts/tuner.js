@@ -3,6 +3,43 @@
   var Tuner, frequencies, root,
     __hasProp = {}.hasOwnProperty;
 
+
+var display = {
+  draw: function(freq, note, diff) {
+    var displayDiv, displayStr;
+    displayDiv = $('.tuner div');
+    displayDiv.removeClass();
+    displayDiv.addClass((Math.abs(diff) < 0.25 ? 'inTune' : 'outTune'));
+//          note = note.replace(/[0-9]*/g, '');
+    if (Math.abs(diff) < 0.25) {
+      if (note.length === 2) {
+        displayStr = "<&nbsp;&nbsp;" + note + " " + freq + "&nbsp;>";
+      } else {
+        displayStr = "<&nbsp;&nbsp;" + note + " " + freq + "&nbsp;&nbsp;>";
+      }
+    } else {
+      if (note.length === 2) {
+        displayStr = '';
+        displayStr += diff > 0.25 ? '<&nbsp;&nbsp;' : '&nbsp;&nbsp;&nbsp;';
+        displayStr += note +" " + freq;
+        displayStr += diff < -0.25 ? '&nbsp;>' : '&nbsp;&nbsp;';
+      } else {
+        displayStr = '';
+        displayStr += diff > 0.25 ? '<&nbsp;&nbsp;' : '&nbsp;&nbsp;&nbsp;';
+        displayStr += note + " " + freq;
+        displayStr += diff < -0.25 ? '&nbsp;&nbsp;>' : '&nbsp;&nbsp;&nbsp;';
+      }
+    }
+    return displayDiv.html(displayStr);
+  },
+  clear: function() {
+    var displayDiv;
+    displayDiv = $('.tuner div');
+    displayDiv.removeClass();
+    return displayDiv.html('--');
+  }
+};
+
   frequencies = {
     'A0': 27.5,
     'A1': 55,
@@ -94,7 +131,7 @@
     'G#7': 3322.44
   };
 
-  Tuner = function() {
+  Tuner = function(callback) {
     var audioContext, buffer, bufferFillSize, bufferFiller, error, fft, fftSize, gauss, hp, i, lp, sampleRate, success;
     window.AudioContext = (function() {
       return window.AudioContext || window.mozAudioContext || window.webkitAudioContext || window.msAudioContext || window.oAudioContext;
@@ -144,7 +181,7 @@
     hp.frequency = 20;
     hp.Q = 0.1;
     success = function(stream) {
-      var display, getPitch, maxPeakCount, maxPeaks, maxTime, noiseCount, noiseThreshold, process, src;
+      var getPitch, maxPeakCount, maxPeaks, maxTime, noiseCount, noiseThreshold, process, src;
       maxTime = 0;
       noiseCount = 0;
       noiseThreshold = -Infinity;
@@ -275,14 +312,14 @@
               interp = 0.5 * ((left.y - right.y) / (left.y - (2 * peak.y) + right.y)) + peak.x;
               freq = interp * (sampleRate / fftSize);
               _ref5 = getPitch(freq), note = _ref5[0], diff = _ref5[1];
-              display.draw(freq, note, diff);
+              callback(freq, note, diff);
               record(freq, note, diff);
             }
           } else {
             maxPeaks = 0;
             maxPeakCount++;
             if (maxPeakCount > 20) {
-              display.clear();
+//              display.clear();
             }
           }
         };
@@ -303,41 +340,6 @@
           }
         }
         return [note, diff];
-      };
-      display = {
-        draw: function(freq, note, diff) {
-          var displayDiv, displayStr;
-          displayDiv = $('.tuner div');
-          displayDiv.removeClass();
-          displayDiv.addClass((Math.abs(diff) < 0.25 ? 'inTune' : 'outTune'));
-//          note = note.replace(/[0-9]*/g, '');
-          if (Math.abs(diff) < 0.25) {
-            if (note.length === 2) {
-              displayStr = "<&nbsp;&nbsp;" + note + " " + freq + "&nbsp;>";
-            } else {
-              displayStr = "<&nbsp;&nbsp;" + note + " " + freq + "&nbsp;&nbsp;>";
-            }
-          } else {
-            if (note.length === 2) {
-              displayStr = '';
-              displayStr += diff > 0.25 ? '<&nbsp;&nbsp;' : '&nbsp;&nbsp;&nbsp;';
-              displayStr += note +" " + freq;
-              displayStr += diff < -0.25 ? '&nbsp;>' : '&nbsp;&nbsp;';
-            } else {
-              displayStr = '';
-              displayStr += diff > 0.25 ? '<&nbsp;&nbsp;' : '&nbsp;&nbsp;&nbsp;';
-              displayStr += note + " " + freq;
-              displayStr += diff < -0.25 ? '&nbsp;&nbsp;>' : '&nbsp;&nbsp;&nbsp;';
-            }
-          }
-          return displayDiv.html(displayStr);
-        },
-        clear: function() {
-          var displayDiv;
-          displayDiv = $('.tuner div');
-          displayDiv.removeClass();
-          return displayDiv.html('--');
-        }
       };
       return setInterval(process, 100);
     };
@@ -412,8 +414,12 @@ record = function(freq, note, diff){
   }
 };
 
+function updatePage(freq, note, diff){
+  display.draw(freq, note, diff);
+  record(freq, note, diff);
+}
 $(function(){
-  Tuner();
+  Tuner(updatePage);
   canvas = $('.tuner canvas')[0];
   $(window).resize(function() {
     canvas.height = $('body').height();
