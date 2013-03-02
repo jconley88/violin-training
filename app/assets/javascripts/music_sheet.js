@@ -100,13 +100,12 @@ function updatePage(freq, note, diff){
 $(function(){
   Tuner(updatePage);
   canvas = $('.tuner canvas')[0];
-  $(window).resize(function() {
-    canvas.height = $('body').height();
-    canvas.width = $('body').width();
-    drawSheet();
-  });
-  $(window).trigger('resize');
+  canvas.height = $('body').height();
+  canvas.width = $('body').width();
+  drawSheet();
+  context = canvas.getContext('2d');
   $('button#clear').click(function(){
+    context.clearRect(0, 0, canvas.width, canvas.height);
     drawSheet();
     xNote = leftNoteBorderX;
   });
