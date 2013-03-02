@@ -95,7 +95,7 @@
   };
 
   Tuner = function() {
-    var audioContext, buffer, bufferFillSize, bufferFiller, canvas, context, error, fft, fftSize, gauss, hp, i, lp, sampleRate, success;
+    var audioContext, buffer, bufferFillSize, bufferFiller, error, fft, fftSize, gauss, hp, i, lp, sampleRate, success;
     window.AudioContext = (function() {
       return window.AudioContext || window.mozAudioContext || window.webkitAudioContext || window.msAudioContext || window.oAudioContext;
     })();
@@ -108,15 +108,6 @@
     if (!navigator.getUserMedia) {
       alert('THIS TUNER REQUIRES THE LATEST BUILD OF CHROME CANARY (23/09/2012) ON MAC WITH "Web Audio Input" ENABLED IN chrome://flags.');
     }
-    canvas = $('.tuner canvas')[0];
-    $(window).resize(function() {
-      canvas.height = $('.tuner').height();
-      canvas.width = $('.tuner').width();
-      drawSheet();
-      return canvas.width;
-    });
-    $(window).trigger('resize');
-    context = canvas.getContext('2d');
     audioContext = new AudioContext();
     sampleRate = audioContext.sampleRate;
     fftSize = 8192;
@@ -153,7 +144,7 @@
     hp.frequency = 20;
     hp.Q = 0.1;
     success = function(stream) {
-      var display, getPitch, maxPeakCount, maxPeaks, maxTime, noiseCount, noiseThreshold, process, render, src;
+      var display, getPitch, maxPeakCount, maxPeaks, maxTime, noiseCount, noiseThreshold, process, src;
       maxTime = 0;
       noiseCount = 0;
       noiseThreshold = -Infinity;
@@ -294,7 +285,6 @@
               display.clear();
             }
           }
-          return render();
         };
       } catch (e) {
         error(e);
@@ -348,30 +338,6 @@
           displayDiv.removeClass();
           return displayDiv.html('--');
         }
-      };
-      render = function() {
-//        var f, freqWidth, newMaxTime, s, timeWidth, _i, _j, _ref, _ref1, _results;
-//        context.clearRect(0, 0, canvas.width, canvas.height);
-//        newMaxTime = _.reduce(buffer, (function(max, next) {
-//          if (Math.abs(next) > max) {
-//            return Math.abs(next);
-//          } else {
-//            return max;
-//          }
-//        }), -Infinity);
-//        maxTime = newMaxTime > maxTime ? newMaxTime : maxTime;
-//        timeWidth = canvas.width / buffer.length;
-//        for (s = _i = 0, _ref = buffer.length; 0 <= _ref ? _i < _ref : _i > _ref; s = 0 <= _ref ? ++_i : --_i) {
-//          context.fillStyle = '#7F7';
-//          context.fillRect(timeWidth * s, 250, timeWidth, -(canvas.height / 4) * (buffer[s] / maxTime));
-//        }
-//        freqWidth = canvas.width / (fft.spectrum.length / 8);
-//        _results = [];
-//        for (f = _j = 0, _ref1 = fft.spectrum.length / 8; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; f = 0 <= _ref1 ? ++_j : --_j) {
-//          context.fillStyle = '#77F';
-//          _results.push(context.fillRect(freqWidth * f, canvas.height - 50, freqWidth, -Math.pow(5e3 * fft.spectrum[f], 1.75)));
-//        }
-//        return _results;
       };
       return setInterval(process, 100);
     };
@@ -447,12 +413,18 @@ record = function(freq, note, diff){
 };
 
 $(function(){
+  Tuner();
+  canvas = $('.tuner canvas')[0];
+  $(window).resize(function() {
+    canvas.height = $('body').height();
+    canvas.width = $('body').width();
+    drawSheet();
+  });
+  $(window).trigger('resize');
   $('button#clear').click(function(){
     drawSheet();
     xNote = leftNoteBorderX;
   });
-  Tuner();
-  drawSheet();
 });
 
 drawSheet = function(){
@@ -460,9 +432,8 @@ drawSheet = function(){
   var bottomStaveY = 150;
   var staveDy = 20;
   var nextStaveY = bottomStaveY;
+
   canvas = $('.tuner canvas')[0];
-  canvas.height = document.height;
-  canvas.width = document.width;
   context = canvas.getContext('2d');
   context.beginPath();
   context.moveTo(leftBorderX, bottomStaveY);
