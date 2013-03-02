@@ -92,8 +92,10 @@ record = function(freq, note, diff){
 };
 
 function updatePage(freq, note, diff){
-  display.draw(freq, note, diff);
-  record(freq, note, diff);
+  if(note){
+    display.draw(freq, note, diff);
+    record(freq, note, diff);
+  }
 }
 $(function(){
   Tuner(updatePage);
