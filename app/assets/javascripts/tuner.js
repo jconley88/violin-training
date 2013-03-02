@@ -285,6 +285,7 @@
               freq = interp * (sampleRate / fftSize);
               _ref5 = getPitch(freq), note = _ref5[0], diff = _ref5[1];
               display.draw(freq, note, diff);
+              record(freq, note, diff);
             }
           } else {
             maxPeaks = 0;
@@ -388,6 +389,62 @@
 
   root.Tuner = Tuner;
 
+yNote = {
+    'G3': 200,
+    'G#3': 200,
+    'A3': 190,
+    'A#3': 190,
+    'B3': 180,
+    'C4': 170,
+    'C#4': 170,
+    'D4': 160,
+    'D#4': 160,
+    'E4': 150,
+    'F4': 140,
+    'F#4': 140,
+    'G4': 130,
+    'G#4': 130,
+    'A4': 120,
+    'A#4': 120,
+    'B4': 110,
+    'C5': 100,
+    'C#5': 100,
+    'D5': 90,
+    'D#5': 90,
+    'E5': 80,
+    'F5': 70,
+    'F#5': 70,
+    'G5': 60,
+    'G#5': 60,
+    'A5': 50,
+    'A#5': 50,
+    'B5': 40
+  };
+
+var xNote = leftNoteBorderX = 125;
+record = function(freq, note, diff){
+  canvas = $('.tuner canvas')[0];
+  context = canvas.getContext('2d');
+
+  radius = 5;
+  minFreq =185;
+  maxFreq = 2000;
+  freqRange = maxFreq - minFreq;
+//  y = canvas.height - ((freq - minFreq) / (maxFreq - minFreq)) * canvas.height
+  y = yNote[note];
+  if(freq <= 185 || freq >= 2000){
+    //Do nothing
+  } else {
+    context.beginPath();
+    context.arc(xNote, y, radius, 0 , 2 * Math.PI, false);
+    context.fillStyle = 'green';
+    context.fill();
+    context.lineWidth = 2;
+    context.strokeStyle = '#003300';
+    context.stroke();
+    xNote += 1;
+  }
+};
 drawSheet = function(){
   var rightBorderX = leftBorderX = 30;
   var bottomStaveY = 150;
