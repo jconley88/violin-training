@@ -7,20 +7,20 @@ var display = {
     // note = note.replace(/[0-9]*/g, '');
     if (Math.abs(diff) < 0.25) {
       if (note.length === 2) {
-        displayStr = "<&nbsp;&nbsp;" + note + " " + freq + "&nbsp;>";
+        displayStr = "<&nbsp;&nbsp;" + note + " " + freq.toFixed(0) + "&nbsp;>";
       } else {
-        displayStr = "<&nbsp;&nbsp;" + note + " " + freq + "&nbsp;&nbsp;>";
+        displayStr = "<&nbsp;&nbsp;" + note + " " + freq.toFixed(0) + "&nbsp;&nbsp;>";
       }
     } else {
       if (note.length === 2) {
         displayStr = '';
         displayStr += diff > 0.25 ? '<&nbsp;&nbsp;' : '&nbsp;&nbsp;&nbsp;';
-        displayStr += note +" " + freq;
+        displayStr += note +" " + freq.toFixed(0);
         displayStr += diff < -0.25 ? '&nbsp;>' : '&nbsp;&nbsp;';
       } else {
         displayStr = '';
         displayStr += diff > 0.25 ? '<&nbsp;&nbsp;' : '&nbsp;&nbsp;&nbsp;';
-        displayStr += note + " " + freq;
+        displayStr += note + " " + freq.toFixed(0);
         displayStr += diff < -0.25 ? '&nbsp;&nbsp;>' : '&nbsp;&nbsp;&nbsp;';
       }
     }
