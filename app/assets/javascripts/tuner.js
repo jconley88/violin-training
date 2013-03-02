@@ -445,6 +445,16 @@ record = function(freq, note, diff){
     xNote += 1;
   }
 };
+
+$(function(){
+  $('button#clear').click(function(){
+    drawSheet();
+    xNote = leftNoteBorderX;
+  });
+  Tuner();
+  drawSheet();
+});
+
 drawSheet = function(){
   var rightBorderX = leftBorderX = 30;
   var bottomStaveY = 150;
