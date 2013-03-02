@@ -66,6 +66,7 @@ yNote = {
     'B5': 40
   };
 
+var lastNote;
 var xNote = leftNoteBorderX = 125;
 record = function(freq, note, diff){
   canvas = $('.tuner canvas')[0];
@@ -80,15 +81,29 @@ record = function(freq, note, diff){
   if(freq <= 185 || freq >= 2000){
     //Do nothing
   } else {
+    if(lastNote === note){
     context.beginPath();
     context.arc(xNote, y, radius, 0 , 2 * Math.PI, false);
     context.fillStyle = 'lightGreen';
     context.fill();
+
+    context.beginPath();
+    context.arc(xNote, y, radius, - Math.PI / 2, Math.PI / 2, false);
     context.lineWidth = 2;
     context.strokeStyle = '#003300';
     context.stroke();
+    } else {
+      context.beginPath();
+      context.arc(xNote, y, radius, 0 , 2 * Math.PI, false);
+      context.fillStyle = 'lightGreen';
+      context.fill();
+      context.lineWidth = 2;
+      context.strokeStyle = '#003300';
+      context.stroke();
+    }
     xNote += 1;
   }
+  lastNote = note;
 };
 
 function updatePage(freq, note, diff){
