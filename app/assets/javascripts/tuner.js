@@ -347,28 +347,28 @@
         }
       };
       render = function() {
-        var f, freqWidth, newMaxTime, s, timeWidth, _i, _j, _ref, _ref1, _results;
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        newMaxTime = _.reduce(buffer, (function(max, next) {
-          if (Math.abs(next) > max) {
-            return Math.abs(next);
-          } else {
-            return max;
-          }
-        }), -Infinity);
-        maxTime = newMaxTime > maxTime ? newMaxTime : maxTime;
-        timeWidth = canvas.width / buffer.length;
-        for (s = _i = 0, _ref = buffer.length; 0 <= _ref ? _i < _ref : _i > _ref; s = 0 <= _ref ? ++_i : --_i) {
-          context.fillStyle = '#7F7';
-          context.fillRect(timeWidth * s, 250, timeWidth, -(canvas.height / 4) * (buffer[s] / maxTime));
-        }
-        freqWidth = canvas.width / (fft.spectrum.length / 8);
-        _results = [];
-        for (f = _j = 0, _ref1 = fft.spectrum.length / 8; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; f = 0 <= _ref1 ? ++_j : --_j) {
-          context.fillStyle = '#77F';
-          _results.push(context.fillRect(freqWidth * f, canvas.height - 50, freqWidth, -Math.pow(5e3 * fft.spectrum[f], 1.75)));
-        }
-        return _results;
+//        var f, freqWidth, newMaxTime, s, timeWidth, _i, _j, _ref, _ref1, _results;
+//        context.clearRect(0, 0, canvas.width, canvas.height);
+//        newMaxTime = _.reduce(buffer, (function(max, next) {
+//          if (Math.abs(next) > max) {
+//            return Math.abs(next);
+//          } else {
+//            return max;
+//          }
+//        }), -Infinity);
+//        maxTime = newMaxTime > maxTime ? newMaxTime : maxTime;
+//        timeWidth = canvas.width / buffer.length;
+//        for (s = _i = 0, _ref = buffer.length; 0 <= _ref ? _i < _ref : _i > _ref; s = 0 <= _ref ? ++_i : --_i) {
+//          context.fillStyle = '#7F7';
+//          context.fillRect(timeWidth * s, 250, timeWidth, -(canvas.height / 4) * (buffer[s] / maxTime));
+//        }
+//        freqWidth = canvas.width / (fft.spectrum.length / 8);
+//        _results = [];
+//        for (f = _j = 0, _ref1 = fft.spectrum.length / 8; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; f = 0 <= _ref1 ? ++_j : --_j) {
+//          context.fillStyle = '#77F';
+//          _results.push(context.fillRect(freqWidth * f, canvas.height - 50, freqWidth, -Math.pow(5e3 * fft.spectrum[f], 1.75)));
+//        }
+//        return _results;
       };
       return setInterval(process, 100);
     };
