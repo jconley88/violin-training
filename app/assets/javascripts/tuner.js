@@ -111,7 +111,9 @@
     canvas = $('.tuner canvas')[0];
     $(window).resize(function() {
       canvas.height = $('.tuner').height();
-      return canvas.width = $('.tuner').width();
+      canvas.width = $('.tuner').width();
+      drawSheet();
+      return canvas.width;
     });
     $(window).trigger('resize');
     context = canvas.getContext('2d');
@@ -386,3 +388,53 @@
 
   root.Tuner = Tuner;
 
+drawSheet = function(){
+  var rightBorderX = leftBorderX = 30;
+  var bottomStaveY = 150;
+  var staveDy = 20;
+  var nextStaveY = bottomStaveY;
+  canvas = $('.tuner canvas')[0];
+  canvas.height = document.height;
+  canvas.width = document.width;
+  context = canvas.getContext('2d');
+  context.beginPath();
+  context.moveTo(leftBorderX, bottomStaveY);
+  context.lineTo(canvas.width - rightBorderX, bottomStaveY);
+  context.stroke();
+
+  nextStaveY -= staveDy;
+  context.beginPath();
+  context.moveTo(leftBorderX, nextStaveY);
+  context.lineTo(canvas.width - rightBorderX, nextStaveY);
+  context.stroke();
+
+  nextStaveY -= staveDy;
+  context.beginPath();
+  context.moveTo(leftBorderX, nextStaveY);
+  context.lineTo(canvas.width - rightBorderX, nextStaveY);
+  context.stroke();
+
+  nextStaveY -= staveDy;
+  context.beginPath();
+  context.moveTo(leftBorderX, nextStaveY);
+  context.lineTo(canvas.width - rightBorderX, nextStaveY);
+  context.stroke();
+
+  nextStaveY -= staveDy;
+  context.beginPath();
+  context.moveTo(leftBorderX, nextStaveY);
+  context.lineTo(canvas.width - rightBorderX, nextStaveY);
+  context.stroke();
+
+  context.beginPath();
+  context.moveTo(leftBorderX, bottomStaveY);
+  context.lineTo(leftBorderX, nextStaveY);
+  context.stroke();
+
+  var imageObj = new Image();
+
+  imageObj.onload = function() {
+    context.drawImage(imageObj, 40, 38, imageObj.width * 0.25, imageObj.height * 0.25);
+  };
+  imageObj.src = '/assets/treble_clef.png';
+}
