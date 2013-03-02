@@ -145,7 +145,7 @@ var Tuner, frequencies, root,
       var getPitch, maxPeakCount, maxPeaks, maxTime, noiseCount, noiseThreshold, process, src;
       maxTime = 0;
       noiseCount = 0;
-      noiseThreshold = -Infinity;
+      noiseThreshold = 0.00001;
       maxPeaks = 0;
       maxPeakCount = 0;
       try {
@@ -187,7 +187,7 @@ var Tuner, frequencies, root,
 //                return max;
 //              }
 //            }), noiseThreshold);
-//            noiseThrehold = noiseThreshold > 0.001 ? 0.001 : noiseThreshold;
+//            noiseThreshold = noiseThreshold > 0.001 ? 0.001 : noiseThreshold;
 //            noiseCount++;
 //          }
           spectrumPoints = (function() {
