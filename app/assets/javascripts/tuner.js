@@ -343,7 +343,7 @@
           var displayDiv;
           displayDiv = $('.tuner div');
           displayDiv.removeClass();
-          return displayDiv.html('');
+          return displayDiv.html('--');
         }
       };
       render = function() {
