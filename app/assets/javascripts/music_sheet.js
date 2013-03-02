@@ -71,7 +71,7 @@ record = function(freq, note, diff){
   canvas = $('.tuner canvas')[0];
   context = canvas.getContext('2d');
 
-  radius = 5;
+  radius = 7;
   minFreq =185;
   maxFreq = 2000;
   freqRange = maxFreq - minFreq;
@@ -82,7 +82,7 @@ record = function(freq, note, diff){
   } else {
     context.beginPath();
     context.arc(xNote, y, radius, 0 , 2 * Math.PI, false);
-    context.fillStyle = 'green';
+    context.fillStyle = 'lightGreen';
     context.fill();
     context.lineWidth = 2;
     context.strokeStyle = '#003300';
