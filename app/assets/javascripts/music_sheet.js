@@ -73,6 +73,7 @@ record = function(freq, note, diff){
   context = canvas.getContext('2d');
 
   radius = 7;
+  gapBetweenNotes = 2;
   minFreq =185;
   maxFreq = 2000;
   freqRange = maxFreq - minFreq;
@@ -90,6 +91,7 @@ record = function(freq, note, diff){
     context.strokeStyle = '#003300';
     context.stroke();
     } else {
+      xNote = xNote + (radius * 2) + gapBetweenNotes;
       context.beginPath();
       context.arc(xNote, y, radius, 0 , 2 * Math.PI, false);
       context.fillStyle = 'lightGreen';
