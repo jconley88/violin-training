@@ -67,6 +67,7 @@ yNote = {
   };
 var lastNote;
 var xNote = leftNoteBorderX = 125;
+var lengthOfCurrentNote = 1;
 process = function(freq, note, diff){
   gapBetweenNotes = 2;
   radius = 7;
@@ -79,20 +80,20 @@ process = function(freq, note, diff){
     //Do nothing
   } else {
     if(lastNote === note){
-      recordContinuedNote(radius, xNote);
+      lengthOfCurrentNote += 1;
+      recordLongNote(radius, xNote, y, lengthOfCurrentNote);
     } else {
-      xNote = xNote + (radius * 2) + gapBetweenNotes;
-      recordNewNote(radius, xNote);
+      xNote = xNote + (radius * 2) + gapBetweenNotes + lengthOfCurrentNote;
+      lengthOfCurrentNote = 1;
+      recordNewNote(radius, xNote, y);
     }
-    xNote += 1;
   }
   lastNote = note;
 };
 
-function recordNewNote(radius, xNote){
+function recordNewNote(radius, xNote, y){
   canvas = $('.tuner canvas')[0];
   context = canvas.getContext('2d');
-
 
   context.beginPath();
   context.arc(xNote, y, radius, 0 , 2 * Math.PI, false);
@@ -103,7 +104,28 @@ function recordNewNote(radius, xNote){
   context.stroke();
 }
 
-function recordContinuedNote(radius, xNote){
+function recordLongNote(radius, xNote, y, length){
+  canvas = $('.tuner canvas')[0];
+  context = canvas.getContext('2d');
+
+  context.beginPath();
+  context.rect(xNote, y - radius, length - 1, radius * 2);
+  context.fillStyle = 'lightGreen';
+  context.fill();
+  context.closePath();
+
+  context.beginPath();
+  context.lineWidth = 2;
+  context.moveTo(xNote, y - radius);
+  context.lineTo(xNote + length, y - radius);
+  context.moveTo(xNote, y + radius);
+  context.lineTo(xNote + length, y + radius);
+  context.stroke();
+  recordEndOfNote(radius, xNote + length, y);
+}
+
+
+function recordEndOfNote(radius, xNote, y){
   canvas = $('.tuner canvas')[0];
   context = canvas.getContext('2d');
 
