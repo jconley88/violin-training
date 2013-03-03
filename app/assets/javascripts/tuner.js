@@ -145,7 +145,7 @@ var Tuner, frequencies, root,
       var getPitch, maxPeakCount, maxPeaks, maxTime, noiseCount, noiseThreshold, process, src;
       maxTime = 0;
       noiseCount = 0;
-      noiseThreshold = 0.00001;
+      noiseThreshold = 0.0001;
       maxPeaks = 0;
       maxPeakCount = 0;
       try {
