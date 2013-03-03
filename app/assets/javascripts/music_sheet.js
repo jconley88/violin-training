@@ -65,15 +65,11 @@ yNote = {
     'A#5': 50,
     'B5': 40
   };
-
 var lastNote;
 var xNote = leftNoteBorderX = 125;
-record = function(freq, note, diff){
-  canvas = $('.tuner canvas')[0];
-  context = canvas.getContext('2d');
-
-  radius = 7;
+process = function(freq, note, diff){
   gapBetweenNotes = 2;
+  radius = 7;
   minFreq =185;
   maxFreq = 2000;
   freqRange = maxFreq - minFreq;
@@ -83,32 +79,47 @@ record = function(freq, note, diff){
     //Do nothing
   } else {
     if(lastNote === note){
-    context.beginPath();
-    context.arc(xNote, y, radius, - Math.PI / 2, Math.PI / 2, false);
-    context.fillStyle = 'lightGreen';
-    context.fill();
-    context.lineWidth = 2;
-    context.strokeStyle = '#003300';
-    context.stroke();
+      recordContinuedNote(radius, xNote);
     } else {
       xNote = xNote + (radius * 2) + gapBetweenNotes;
-      context.beginPath();
-      context.arc(xNote, y, radius, 0 , 2 * Math.PI, false);
-      context.fillStyle = 'lightGreen';
-      context.fill();
-      context.lineWidth = 2;
-      context.strokeStyle = '#003300';
-      context.stroke();
+      recordNewNote(radius, xNote);
     }
     xNote += 1;
   }
   lastNote = note;
 };
 
+function recordNewNote(radius, xNote){
+  canvas = $('.tuner canvas')[0];
+  context = canvas.getContext('2d');
+
+
+  context.beginPath();
+  context.arc(xNote, y, radius, 0 , 2 * Math.PI, false);
+  context.fillStyle = 'lightGreen';
+  context.fill();
+  context.lineWidth = 2;
+  context.strokeStyle = '#003300';
+  context.stroke();
+}
+
+function recordContinuedNote(radius, xNote){
+  canvas = $('.tuner canvas')[0];
+  context = canvas.getContext('2d');
+
+  context.beginPath();
+  context.arc(xNote, y, radius, - Math.PI / 2, Math.PI / 2, false);
+  context.fillStyle = 'lightGreen';
+  context.fill();
+  context.lineWidth = 2;
+  context.strokeStyle = '#003300';
+  context.stroke();
+}
+
 function updatePage(freq, note, diff){
   if(note){
     display.draw(freq, note, diff);
-    record(freq, note, diff);
+    process(freq, note, diff);
   }
 }
 $(function(){
