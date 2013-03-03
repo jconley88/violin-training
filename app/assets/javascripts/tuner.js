@@ -301,7 +301,7 @@ var Tuner, frequencies, root,
         }
         return [note, diff];
       };
-      return setInterval(process, 100);
+      return setInterval(process, 20);
     };
     error = function(e) {
       console.log(e);
