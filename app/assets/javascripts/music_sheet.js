@@ -99,7 +99,7 @@ process = function(freq, note, diff){
       }
       if(lengthOfCurrentNote >= 3){
         nextX = xNote + (radius * 2) + gapBetweenNotes + lengthOfCurrentNote;
-        recordLongNote(radius, xNote, y, lengthOfCurrentNote, percentDiff);
+        recordLongNote(radius, xNote, y, lengthOfCurrentNote - 1, percentDiff);
       }
     } else {
       lengthOfCurrentNote = 1;
@@ -118,24 +118,26 @@ function recordNoteBeginning(radius, xNote, y){
   context.stroke();
 }
 
-function recordLongNote(radius, xNote, y, length, percentDiff){
+function recordLongNote(radius, xNote, y, leafletLength, percentDiff){
   canvas = $('.tuner canvas')[0];
   context = canvas.getContext('2d');
 
-  fillBeginningOfNote(radius, xNote, y, percentDiff);
-  context.beginPath();
-  context.rect(xNote, y - radius, length - 1, radius * 2);
-  fillNote(context, percentDiff);
-  context.closePath();
+  if(leafletLength > 0){
+    fillBeginningOfNote(radius, xNote, y, percentDiff);
+    context.beginPath();
+    context.rect(xNote, y - radius, leafletLength, radius * 2);
+    fillNote(context, percentDiff);
+    context.closePath();
+  }
 
   context.beginPath();
   context.lineWidth = 2;
   context.moveTo(xNote, y - radius);
-  context.lineTo(xNote + length, y - radius);
+  context.lineTo(xNote + leafletLength, y - radius);
   context.moveTo(xNote, y + radius);
-  context.lineTo(xNote + length, y + radius);
+  context.lineTo(xNote + leafletLength, y + radius);
   context.stroke();
-  recordEndOfNote(radius, xNote + length, y, percentDiff);
+  recordEndOfNote(radius, xNote + leafletLength, y, percentDiff);
 }
 
 function recordEndOfNote(radius, xNote, y, percentDiff){
