@@ -112,6 +112,7 @@ function recordLongNote(radius, xNote, y, length, percentDiff){
   canvas = $('.tuner canvas')[0];
   context = canvas.getContext('2d');
 
+  fillBeginningOfNote(radius, xNote, y, percentDiff);
   context.beginPath();
   context.rect(xNote, y - radius, length - 1, radius * 2);
   fillNote(context, percentDiff);
@@ -137,6 +138,15 @@ function recordEndOfNote(radius, xNote, y, percentDiff){
   context.lineWidth = 2;
   context.strokeStyle = '#003300';
   context.stroke();
+}
+
+function fillBeginningOfNote(radius, xNote, y, percentDiff){
+  canvas = $('.tuner canvas')[0];
+  context = canvas.getContext('2d');
+
+  context.beginPath();
+  context.arc(xNote, y, radius - 1.4, - Math.PI / 2, Math.PI / 2, true);
+  fillNote(context, percentDiff);
 }
 
 function fillNote(context, percentDiff){
