@@ -1,6 +1,18 @@
 var Tuner, frequencies, root,
     __hasProp = {}.hasOwnProperty;
 
+function getNextFrequency(note){
+  freq = frequencies[note];
+  index = orderedFrequencies.indexOf(freq);
+  return orderedFrequencies[index + 1];
+}
+
+function getPrevFrequency(note){
+  freq = frequencies[note];
+  index = orderedFrequencies.indexOf(freq);
+  return orderedFrequencies[index - 1];
+}
+
   frequencies = {
     'A0': 27.5,
     'A1': 55,
@@ -91,6 +103,10 @@ var Tuner, frequencies, root,
     'G#6': 1661.22,
     'G#7': 3322.44
   };
+
+  orderedFrequencies = _.sortBy(frequencies, function(freq, note, object){
+    return freq;
+  });
 
   Tuner = function(callback) {
     var audioContext, buffer, bufferFillSize, bufferFiller, error, fft, fftSize, gauss, hp, i, lp, sampleRate, success;

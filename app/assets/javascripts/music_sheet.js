@@ -79,39 +79,42 @@ process = function(freq, note, diff){
   if(freq <= 185 || freq >= 2000){
     //Do nothing
   } else {
+    var percentDiff = 0;
+    if(diff > 0){
+      percentDiff = diff / ( getNextFrequency(note) - frequencies[note] );
+    } else {
+      percentDiff = diff / ( frequencies[note] - getPrevFrequency(note) );
+    }
     if(lastNote === note){
       lengthOfCurrentNote += 1;
-      recordLongNote(radius, xNote, y, lengthOfCurrentNote);
+      recordLongNote(radius, xNote, y, lengthOfCurrentNote, percentDiff);
     } else {
       xNote = xNote + (radius * 2) + gapBetweenNotes + lengthOfCurrentNote;
       lengthOfCurrentNote = 1;
-      recordNewNote(radius, xNote, y);
+      recordNewNote(radius, xNote, y, percentDiff);
     }
   }
   lastNote = note;
 };
 
-function recordNewNote(radius, xNote, y){
+function recordNewNote(radius, xNote, y, percentDiff){
   canvas = $('.tuner canvas')[0];
   context = canvas.getContext('2d');
-
   context.beginPath();
   context.arc(xNote, y, radius, 0 , 2 * Math.PI, false);
-  context.fillStyle = 'lightGreen';
-  context.fill();
+  fillNote(context, percentDiff);
   context.lineWidth = 2;
   context.strokeStyle = '#003300';
   context.stroke();
 }
 
-function recordLongNote(radius, xNote, y, length){
+function recordLongNote(radius, xNote, y, length, percentDiff){
   canvas = $('.tuner canvas')[0];
   context = canvas.getContext('2d');
 
   context.beginPath();
   context.rect(xNote, y - radius, length - 1, radius * 2);
-  context.fillStyle = 'lightGreen';
-  context.fill();
+  fillNote(context, percentDiff);
   context.closePath();
 
   context.beginPath();
@@ -121,21 +124,45 @@ function recordLongNote(radius, xNote, y, length){
   context.moveTo(xNote, y + radius);
   context.lineTo(xNote + length, y + radius);
   context.stroke();
-  recordEndOfNote(radius, xNote + length, y);
+  recordEndOfNote(radius, xNote + length, y, percentDiff);
 }
 
-
-function recordEndOfNote(radius, xNote, y){
+function recordEndOfNote(radius, xNote, y, percentDiff){
   canvas = $('.tuner canvas')[0];
   context = canvas.getContext('2d');
 
   context.beginPath();
   context.arc(xNote, y, radius, - Math.PI / 2, Math.PI / 2, false);
-  context.fillStyle = 'lightGreen';
-  context.fill();
+  fillNote(context, percentDiff);
   context.lineWidth = 2;
   context.strokeStyle = '#003300';
   context.stroke();
+}
+
+function fillNote(context, percentDiff){
+  var fillStyle;
+  if(Math.abs(percentDiff) <= 0.10){
+    fillStyle = 'lightGreen';
+  } else if(percentDiff < -0.10){
+    fillStyle = context.createLinearGradient(xNote, y, xNote, y + radius);
+    fillStyle.addColorStop(0, 'white');
+    if ( percentDiff > -0.25 ) {
+      fillStyle.addColorStop(1, 'green');
+    } else {
+      fillStyle.addColorStop(1, 'red');
+    }
+  } else if(percentDiff > 0.10){
+    var fillStyle = context.createLinearGradient(xNote, y, xNote, y - radius);
+    fillStyle.addColorStop(0, 'white');
+    if ( percentDiff < 0.25 ) {
+      fillStyle.addColorStop(1, 'green');
+    } else {
+      fillStyle.addColorStop(1, 'red');
+    }
+  }
+  context.fillStyle = fillStyle;
+  context.fill();
+
 }
 
 function updatePage(freq, note, diff){
