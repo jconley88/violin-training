@@ -185,6 +185,30 @@ $(function(){
   });
 });
 
+function test(){
+  process(420, "A4", 420 - frequencies["A4"]);
+  process(430, "A4", 430 - frequencies["A4"]);
+  process(440, "A4", 440 - frequencies["A4"]);
+  process(440, "A4", 440 - frequencies["A4"]);
+  process(440, "A4", 440 - frequencies["A4"]);
+  process(440, "A4", 440 - frequencies["A4"]);
+  process(440, "A4", 440 - frequencies["A4"]);
+  process(440, "A4", 440 - frequencies["A4"]);
+  process(440, "A4", 440 - frequencies["A4"]);
+  process(440, "A4", 440 - frequencies["A4"]);
+  process(440, "A4", 440 - frequencies["A4"]);
+  process(440, "A4", 440 - frequencies["A4"]);
+  process(450, "A4", 450 - frequencies["A4"]);
+  process(460, "A4", 460 - frequencies["A4"]);
+
+  process(500, "B4", 500 - frequencies["B4"]);
+  process(500, "B4", 500 - frequencies["B4"]);
+
+  process(440, "A4", 440 - frequencies["A4"]);
+  process(440, "A4", 440 - frequencies["A4"]);
+  process(440, "A4", 440 - frequencies["A4"]);
+}
+
 drawSheet = function(){
   var rightBorderX = leftBorderX = 30;
   var bottomStaveY = 150;
