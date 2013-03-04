@@ -66,10 +66,12 @@ yNote = {
     'B5': 40
   };
 var lastNote;
+var nextX;
 var xNote = leftNoteBorderX = 125;
 var lengthOfCurrentNote = 1;
+var firstNote = true;
 process = function(freq, note, diff){
-  gapBetweenNotes = 2;
+  gapBetweenNotes = 3;
   radius = 7;
   minFreq =185;
   maxFreq = 2000;
@@ -87,22 +89,30 @@ process = function(freq, note, diff){
     }
     if(lastNote === note){
       lengthOfCurrentNote += 1;
-      recordLongNote(radius, xNote, y, lengthOfCurrentNote, percentDiff);
+      if(lengthOfCurrentNote == 3){
+        if(firstNote) {
+          firstNote = false;
+        } else {
+          xNote = nextX || xNote;
+        }
+        recordNoteBeginning(radius, xNote, y);
+      }
+      if(lengthOfCurrentNote >= 3){
+        nextX = xNote + (radius * 2) + gapBetweenNotes + lengthOfCurrentNote;
+        recordLongNote(radius, xNote, y, lengthOfCurrentNote, percentDiff);
+      }
     } else {
-      xNote = xNote + (radius * 2) + gapBetweenNotes + lengthOfCurrentNote;
       lengthOfCurrentNote = 1;
-      recordNewNote(radius, xNote, y, percentDiff);
     }
   }
   lastNote = note;
 };
 
-function recordNewNote(radius, xNote, y, percentDiff){
+function recordNoteBeginning(radius, xNote, y){
   canvas = $('.tuner canvas')[0];
   context = canvas.getContext('2d');
   context.beginPath();
   context.arc(xNote, y, radius, 0 , 2 * Math.PI, false);
-  fillNote(context, percentDiff);
   context.lineWidth = 2;
   context.strokeStyle = '#003300';
   context.stroke();
@@ -192,7 +202,9 @@ $(function(){
     context.clearRect(0, 0, canvas.width, canvas.height);
     drawSheet();
     xNote = leftNoteBorderX;
+    firstNote = true;
   });
+//  test();
 });
 
 function test(){
