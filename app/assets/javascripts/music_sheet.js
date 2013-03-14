@@ -15,7 +15,7 @@ $(function(){
   canvas = $('.tuner canvas')[0];
   canvas.height = $('body').height();
   canvas.width = $('body').width();
-  drawSheet();
+  background.draw();
   context = canvas.getContext('2d');
   $('button#clear').click(function(){
     clearCanvas(canvas, context);
@@ -25,7 +25,7 @@ $(function(){
 
 function clearCanvas(canvas, context){
   context.clearRect(0, 0, canvas.width, canvas.height);
-  drawSheet();
+  background.draw();
   xNote = leftNoteBorderX;
   firstNote = true;
   lastNote = "";
@@ -254,52 +254,3 @@ function test(){
   updatePage(440, "A4", 440 - frequencies["A4"]);
 }
 
-drawSheet = function(){
-  var rightBorderX = leftBorderX = 30;
-  var bottomStaveY = 150;
-  var staveDy = 20;
-  var nextStaveY = bottomStaveY;
-
-  canvas = $('.tuner canvas')[0];
-  context = canvas.getContext('2d');
-  context.beginPath();
-  context.moveTo(leftBorderX, bottomStaveY);
-  context.lineTo(canvas.width - rightBorderX, bottomStaveY);
-  context.stroke();
-
-  nextStaveY -= staveDy;
-  context.beginPath();
-  context.moveTo(leftBorderX, nextStaveY);
-  context.lineTo(canvas.width - rightBorderX, nextStaveY);
-  context.stroke();
-
-  nextStaveY -= staveDy;
-  context.beginPath();
-  context.moveTo(leftBorderX, nextStaveY);
-  context.lineTo(canvas.width - rightBorderX, nextStaveY);
-  context.stroke();
-
-  nextStaveY -= staveDy;
-  context.beginPath();
-  context.moveTo(leftBorderX, nextStaveY);
-  context.lineTo(canvas.width - rightBorderX, nextStaveY);
-  context.stroke();
-
-  nextStaveY -= staveDy;
-  context.beginPath();
-  context.moveTo(leftBorderX, nextStaveY);
-  context.lineTo(canvas.width - rightBorderX, nextStaveY);
-  context.stroke();
-
-  context.beginPath();
-  context.moveTo(leftBorderX, bottomStaveY);
-  context.lineTo(leftBorderX, nextStaveY);
-  context.stroke();
-
-  var imageObj = new Image();
-
-  imageObj.onload = function() {
-    context.drawImage(imageObj, 40, 38, imageObj.width * 0.25, imageObj.height * 0.25);
-  };
-  imageObj.src = '/assets/treble_clef.png';
-}
