@@ -1,9 +1,7 @@
 var foreground;
 $(function(){
   foreground = function(){
-    var lastNote, nextX, START_POSITION_X,
-      canvas = $('.tuner canvas')[0],
-      context = canvas.getContext('2d'),
+    var lastNote, nextX, START_POSITION_X, canvas, context,
       currentPositionX = START_POSITION_X = 125,
       lengthOfCurrentNote = 1,
       firstNote = true,
@@ -43,9 +41,13 @@ $(function(){
         'B5': 40
       };
 
+    canvas = $('.tuner canvas#foreground')[0];
+    canvas.height = 800;
+    canvas.width = $('body').width();
+    context = canvas.getContext('2d');
+
     function clear(){
       context.clearRect(0, 0, canvas.width, canvas.height);
-      background.draw();
       currentPositionX = START_POSITION_X;
       firstNote = true;
       lastNote = "";
