@@ -12,13 +12,9 @@ var notes = function(){
 
 $(function(){
   Tuner(updatePage);
-  canvas = $('.tuner canvas')[0];
-  canvas.height = $('body').height();
-  canvas.width = $('body').width();
   background.draw();
-  context = canvas.getContext('2d');
   $('button#clear').click(function(){
-    foreground.clear(canvas, context);
+    foreground.clear();
   });
   test();
 });
