@@ -1,3 +1,37 @@
+var notes = function(){
+  var samples = [];
+  function addSample(freq, note, diff){
+    samples.push({freq: freq, note: note, diff: diff});
+  }
+
+  return {
+    addSample: addSample,
+    samples: samples
+  }
+}();
+
+$(function(){
+  Tuner(updatePage);
+  canvas = $('.tuner canvas')[0];
+  canvas.height = $('body').height();
+  canvas.width = $('body').width();
+  drawSheet();
+  context = canvas.getContext('2d');
+  $('button#clear').click(function(){
+    clearCanvas(canvas, context);
+  });
+  test();
+});
+
+function clearCanvas(canvas, context){
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  drawSheet();
+  xNote = leftNoteBorderX;
+  firstNote = true;
+  lastNote = "";
+  lengthOfCurrentNote = 0;
+}
+
 var display = {
   draw: function(freq, note, diff) {
     var displayDiv, displayStr;
@@ -124,10 +158,8 @@ function recordLongNote(radius, xNote, y, leafletLength, percentDiff){
 
   if(leafletLength > 0){
     fillBeginningOfNote(radius, xNote, y, percentDiff);
-    context.beginPath();
     context.rect(xNote, y - radius, leafletLength, radius * 2);
     fillNote(context, percentDiff);
-    context.closePath();
   }
 
   context.beginPath();
@@ -189,48 +221,37 @@ function fillNote(context, percentDiff){
 
 function updatePage(freq, note, diff){
   if(note){
+    notes.addSample(freq, note, diff);
     display.draw(freq, note, diff);
-    process(freq, note, diff);
+    clearCanvas(canvas, context);
+    jQuery.each(notes.samples, function(index, sample){
+      process(sample.freq, sample.note, sample.diff);
+    });
   }
 }
-$(function(){
-  Tuner(updatePage);
-  canvas = $('.tuner canvas')[0];
-  canvas.height = $('body').height();
-  canvas.width = $('body').width();
-  drawSheet();
-  context = canvas.getContext('2d');
-  $('button#clear').click(function(){
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    drawSheet();
-    xNote = leftNoteBorderX;
-    firstNote = true;
-  });
-//  test();
-});
 
 function test(){
-  process(420, "A4", 420 - frequencies["A4"]);
-  process(430, "A4", 430 - frequencies["A4"]);
-  process(440, "A4", 440 - frequencies["A4"]);
-  process(440, "A4", 440 - frequencies["A4"]);
-  process(440, "A4", 440 - frequencies["A4"]);
-  process(440, "A4", 440 - frequencies["A4"]);
-  process(440, "A4", 440 - frequencies["A4"]);
-  process(440, "A4", 440 - frequencies["A4"]);
-  process(440, "A4", 440 - frequencies["A4"]);
-  process(440, "A4", 440 - frequencies["A4"]);
-  process(440, "A4", 440 - frequencies["A4"]);
-  process(440, "A4", 440 - frequencies["A4"]);
-  process(450, "A4", 450 - frequencies["A4"]);
-  process(460, "A4", 460 - frequencies["A4"]);
+  updatePage(420, "A4", 420 - frequencies["A4"]);
+  updatePage(430, "A4", 430 - frequencies["A4"]);
+  updatePage(440, "A4", 440 - frequencies["A4"]);
+  updatePage(440, "A4", 440 - frequencies["A4"]);
+  updatePage(440, "A4", 440 - frequencies["A4"]);
+  updatePage(440, "A4", 440 - frequencies["A4"]);
+  updatePage(440, "A4", 440 - frequencies["A4"]);
+  updatePage(440, "A4", 440 - frequencies["A4"]);
+  updatePage(440, "A4", 440 - frequencies["A4"]);
+  updatePage(440, "A4", 440 - frequencies["A4"]);
+  updatePage(440, "A4", 440 - frequencies["A4"]);
+  updatePage(440, "A4", 440 - frequencies["A4"]);
+  updatePage(450, "A4", 450 - frequencies["A4"]);
+  updatePage(460, "A4", 460 - frequencies["A4"]);
 
-  process(500, "B4", 500 - frequencies["B4"]);
-  process(500, "B4", 500 - frequencies["B4"]);
+  updatePage(500, "B4", 500 - frequencies["B4"]);
+  updatePage(500, "B4", 500 - frequencies["B4"]);
 
-  process(440, "A4", 440 - frequencies["A4"]);
-  process(440, "A4", 440 - frequencies["A4"]);
-  process(440, "A4", 440 - frequencies["A4"]);
+  updatePage(440, "A4", 440 - frequencies["A4"]);
+  updatePage(440, "A4", 440 - frequencies["A4"]);
+  updatePage(440, "A4", 440 - frequencies["A4"]);
 }
 
 drawSheet = function(){
