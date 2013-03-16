@@ -26,6 +26,10 @@ $(function(){
     foreground.clear();
     notes.clear();
   });
+  $('button#stop').click(function(){
+    clearInterval(setIntervalId);
+    frequency.clear();
+  });
   test();
 });
 

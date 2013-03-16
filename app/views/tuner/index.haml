@@ -1,6 +1,8 @@
 .tuner
   = button_tag(:id => 'clear', :type => 'button') do
     - content_tag(:strong, 'Clear')
+  = button_tag(:id => 'stop', :type => 'button') do
+    - content_tag(:strong, 'Stop')
   %div --
   %canvas#background
   %canvas#foreground

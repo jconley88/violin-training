@@ -1,4 +1,4 @@
-var Tuner, frequencies, root,
+var Tuner, frequencies, root, setIntervalId,
     __hasProp = {}.hasOwnProperty;
 
 function getNextFrequency(note){
@@ -317,7 +317,7 @@ function getPrevFrequency(note){
         }
         return [note, diff];
       };
-      return setInterval(process, 20);
+      return setIntervalId = setInterval(process, 100);
     };
     error = function(e) {
       console.log(e);
