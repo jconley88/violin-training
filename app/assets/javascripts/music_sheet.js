@@ -3,11 +3,19 @@ var notes = function(){
   function addSample(freq, note, diff, fft){
     _samples.push({freq: freq, note: note, diff: diff, fft: fft});
   }
+
+  function clear(){
+    _samples = [];
+  }
+
+  function samples(){
+    return _samples;
   }
 
   return {
     addSample: addSample,
-    samples: samples
+    samples: samples,
+    clear: clear
   }
 }();
 
@@ -16,6 +24,7 @@ $(function(){
   background.draw();
   $('button#clear').click(function(){
     foreground.clear();
+    notes.clear();
   });
   test();
 });
@@ -64,7 +73,7 @@ function updatePage(freq, note, diff, fft){
     notes.addSample(freq, note, diff, fft);
     display.draw(freq, note, diff);
     foreground.clear();
-    jQuery.each(notes.samples, function(index, sample){
+    jQuery.each(notes.samples(), function(index, sample){
       foreground.process(sample.freq, sample.note, sample.diff);
     });
   }
