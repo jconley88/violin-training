@@ -1,7 +1,8 @@
 var notes = function(){
-  var samples = [];
-  function addSample(freq, note, diff){
-    samples.push({freq: freq, note: note, diff: diff});
+  var _samples = [];
+  function addSample(freq, note, diff, fft){
+    _samples.push({freq: freq, note: note, diff: diff, fft: fft});
+  }
   }
 
   return {
@@ -55,9 +56,12 @@ var display = {
   }
 };
 
-function updatePage(freq, note, diff){
+function updatePage(freq, note, diff, fft){
+  if(fft){
+    frequency.draw(fft);
+  }
   if(note){
-    notes.addSample(freq, note, diff);
+    notes.addSample(freq, note, diff, fft);
     display.draw(freq, note, diff);
     foreground.clear();
     jQuery.each(notes.samples, function(index, sample){

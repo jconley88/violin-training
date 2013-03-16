@@ -289,7 +289,6 @@ function getPrevFrequency(note){
               interp = 0.5 * ((left.y - right.y) / (left.y - (2 * peak.y) + right.y)) + peak.x;
               freq = interp * (sampleRate / fftSize);
               _ref5 = getPitch(freq), note = _ref5[0], diff = _ref5[1];
-              callback(freq, note, diff);
             }
           } else {
             maxPeaks = 0;
@@ -298,6 +297,7 @@ function getPrevFrequency(note){
 //              display.clear();
             }
           }
+          callback(freq, note, diff, fft);
         };
       } catch (e) {
         error(e);
