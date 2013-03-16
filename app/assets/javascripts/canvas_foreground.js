@@ -42,7 +42,7 @@ $(function(){
       };
 
     canvas = $('.tuner canvas#foreground')[0];
-    canvas.height = 800;
+    canvas.height = 250;
     canvas.width = $('body').width();
     context = canvas.getContext('2d');
 
