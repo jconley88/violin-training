@@ -1,7 +1,11 @@
 var notes = function(){
   var _samples = [];
   function addSample(freq, note, diff, fft){
-    _samples.push({freq: freq, note: note, diff: diff, fft: fft});
+    var spectrum;
+    if (fft) {
+      var spectrum = new Float32Array(fft.spectrum.subarray(0));
+    }
+    _samples.push({freq: freq, note: note, diff: diff, spectrum: spectrum});
   }
 
   function clear(){
@@ -20,6 +24,17 @@ var notes = function(){
 }();
 
 $(function(){
+  var canvas = $('canvas#foreground');
+  canvas.on('click', function(e) {
+    var mouse = {
+      x: e.offsetX,
+      y: e.offsetY
+    };
+    sample = foreground.sampleAt(mouse.x);
+    if(sample){
+      frequency.draw(sample.spectrum)
+    }
+  });
   Tuner(updatePage);
   background.draw();
   $('button#clear').click(function(){
@@ -76,10 +91,7 @@ function updatePage(freq, note, diff, fft){
   if(note){
     notes.addSample(freq, note, diff, fft);
     display.draw(freq, note, diff);
-    foreground.clear();
-    jQuery.each(notes.samples(), function(index, sample){
-      foreground.process(sample.freq, sample.note, sample.diff);
-    });
+    foreground.displaySamples(notes.samples());
   }
 }
 

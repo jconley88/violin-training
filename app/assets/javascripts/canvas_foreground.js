@@ -4,6 +4,7 @@ $(function(){
     var lastNote, nextX, START_POSITION_X, canvas, context,
       currentPositionX = START_POSITION_X = 125,
       lengthOfCurrentNote = 1,
+      samplesIndexedByPosition = {},
       firstNote = true,
       GAP_BETWEEN_NOTES = 3,
       NOTE_RADIUS = 7,
@@ -49,23 +50,24 @@ $(function(){
     function clear(){
       context.clearRect(0, 0, canvas.width, canvas.height);
       currentPositionX = START_POSITION_X;
+      samplesIndexedByPosition = {};
       firstNote = true;
       lastNote = "";
       lengthOfCurrentNote = 0;
     }
 
-    function process(freq, note, diff){
-      var y = yNote[note];
-      if(freq <= MIN_FREQ || freq >= MAX_FREQ){
+    function process(sample){
+      var y = yNote[sample.note];
+      if(sample.freq <= MIN_FREQ || sample.freq >= MAX_FREQ){
         //Do nothing
       } else {
         var percentDiff = 0;
-        if(diff > 0){
-          percentDiff = diff / ( getNextFrequency(note) - frequencies[note] );
+        if(sample.diff > 0){
+          percentDiff = sample.diff / ( getNextFrequency(sample.note) - frequencies[sample.note] );
         } else {
-          percentDiff = diff / ( frequencies[note] - getPrevFrequency(note) );
+          percentDiff = sample.diff / ( frequencies[sample.note] - getPrevFrequency(sample.note) );
         }
-        if(lastNote === note){
+        if(lastNote === sample.note){
           lengthOfCurrentNote += 1;
           if(lengthOfCurrentNote == 3){
             if(firstNote) {
@@ -78,12 +80,70 @@ $(function(){
           if(lengthOfCurrentNote >= 3){
             nextX = currentPositionX + (NOTE_RADIUS * 2) + GAP_BETWEEN_NOTES + lengthOfCurrentNote;
             recordLongNote(y, lengthOfCurrentNote - 1, percentDiff);
+            samplesIndexedByPosition[currentPositionX +lengthOfCurrentNote - 3] = sample;
           }
         } else {
           lengthOfCurrentNote = 1;
         }
       }
-      lastNote = note;
+      lastNote = sample.note;
+    }
+
+    function sampleAt(x){
+      var nearestX;
+      displaySamples(notes.samples());
+      nearestX = findNearest(x, samplesIndexedByPosition);
+      indicateSampleSelectedAt(nearestX);
+      return samplesIndexedByPosition[nearestX];
+    }
+
+    function indicateSampleSelectedAt(x){
+      context.beginPath();
+      context.moveTo(x, 40);
+      context.lineTo(x, 200);
+      context.stroke();
+    }
+
+    function findNearest(x, samples) {
+      var prev, next;
+      if (samples[x]) {
+        return x;
+      } else {
+        if (prev = findPrev(x, samples)) {
+          return prev;
+        } else if (next = findNext(x, samples)) {
+          return next;
+        } else {
+          return null;
+        }
+      }
+    }
+
+    function findPrev(x, samples){
+      var i = 1;
+      while (i <= GAP_BETWEEN_NOTES + NOTE_RADIUS) {
+        if (samples[x - i]){
+          return x - i;
+        }
+        i += 1;
+      }
+    }
+
+    function findNext(x, samples){
+      var i = 1;
+      while (i <= GAP_BETWEEN_NOTES + NOTE_RADIUS) {
+        if (samples[x + i]){
+          return x + i;
+        }
+        i += 1;
+      }
+    }
+
+    function displaySamples(samples){
+      clear();
+      jQuery.each(samples, function(index, sample){
+        process(sample);
+      });
     }
 
     function recordNoteBeginning(y){
@@ -153,7 +213,9 @@ $(function(){
 
     return {
       process: process,
-      clear: clear
+      clear: clear,
+      sampleAt: sampleAt,
+      displaySamples: displaySamples
     }
   }();
 });
